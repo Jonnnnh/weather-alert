@@ -30,15 +30,13 @@ public class Preferences {
     private Frequency frequency;
 
     @Column(name = "alerts", columnDefinition = "jsonb", nullable = false)
-    private String alerts; // Хранение в формате JSON
+    private String alerts;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
-
-    // Добавьте другие поля, если необходимо
 
     @PrePersist
     public void prePersist() {
