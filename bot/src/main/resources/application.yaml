@@ -15,7 +15,7 @@ app:
     username: guest
     password: guest
   telegram:
-    name: Weather_Big_Bot
+    bot-name: Weather_Big_Bot
     token: ${TOKEN}
 
 logging:
