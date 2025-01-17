@@ -2,7 +2,7 @@ plugins {
     id 'java'
     id 'org.springframework.boot' version '3.4.1'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'io.freefair.lombok' version '6.4.1'
+    id 'io.freefair.lombok' version '8.11'
 }
 
 group = 'com.example'
@@ -23,21 +23,30 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-amqp'
 
-    implementation 'com.github.pengrad:java-telegram-bot-api:6.5.0'
+    implementation 'com.github.pengrad:java-telegram-bot-api:7.11.0'
 
-    implementation 'jakarta.validation:jakarta.validation-api:3.0.0'
+    implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
+    implementation 'org.hibernate.validator:hibernate-validator:8.0.0.Final'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.18.2'
 
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.2'
+    implementation 'com.squareup.okio:okio:3.10.2'
+    implementation 'commons-io:commons-io:2.18.0'
+    implementation 'org.eclipse.jetty.http2:http2-common:11.0.24'
 
-    implementation 'org.mapstruct:mapstruct:1.5.5.Final'
-    annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.5.Final'
+    implementation 'io.github.cdimascio:dotenv-java:3.1.0'
+
+    implementation 'org.springframework.boot:spring-boot-devtools'
+
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor 'org.mapstruct:mapstruct-processor:1.6.3'
+
+    implementation 'org.apache.commons:commons-compress:1.27.1'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.mockito:mockito-core:5.5.0'
+    testImplementation 'org.mockito:mockito-core:5.15.2'
     testImplementation 'com.github.tomakehurst:wiremock:3.0.0'
-    testImplementation 'org.testcontainers:junit-jupiter:1.19.0'
-    testImplementation 'org.testcontainers:rabbitmq:1.19.0'
-    testImplementation 'org.testcontainers:postgresql:1.19.0'
+    testImplementation 'org.testcontainers:junit-jupiter:1.20.4'
+    testImplementation 'org.testcontainers:rabbitmq:1.20.4'
     testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 
     annotationProcessor 'org.springframework.boot:spring-boot-configuration-processor'
