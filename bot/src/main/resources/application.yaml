@@ -1,15 +1,25 @@
+spring:
+  config:
+    import: "optional:classpath:.properties"
+
 app:
   application-name: tgBotService
   server:
-    port: ${BOT_PORT}
+    port: 8080
   logging:
     root-level: info
     bot-level: debug
   rabbitmq:
-    host: ${RABBITMQ_HOST}
-    port: ${RABBITMQ_PORT}
-    username: ${RABBITMQ_USERNAME}
-    password: ${RABBITMQ_PASSWORD}
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
   telegram:
-    bot-name: "Weather_Big_Bot"
-    token: ${TELEGRAM-TOKEN}
+    name: Weather_Big_Bot
+    token: ${TOKEN}
+
+logging:
+  level:
+    org.springframework.boot.context.properties: TRACE
+    org.springframework.boot.context.config: DEBUG
+
