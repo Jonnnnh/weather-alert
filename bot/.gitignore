@@ -3,7 +3,7 @@ build/
 gradle/
 gradlew.bat
 gradlew
-.env
+src/main/resources/.properties
 !**/src/main/**/build/
 !**/src/test/**/build/
 
