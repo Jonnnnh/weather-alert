@@ -1,6 +1,9 @@
 package com.example.bot.telegram.sender;
 
 
+import com.pengrad.telegrambot.request.SendMessage;
+import com.pengrad.telegrambot.response.SendResponse;
+
 public interface MessageSender {
-    void sendMessage(Long chatId, String message);
+    SendResponse sendMessage(SendMessage sendMessage);
 }
