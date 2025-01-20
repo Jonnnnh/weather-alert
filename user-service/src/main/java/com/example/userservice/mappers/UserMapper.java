@@ -1,7 +1,7 @@
-package com.example.models.mappers;
+package com.example.userservice.mappers;
 
-import com.example.models.dto.UserDTO;
-import com.example.models.entities.User;
+import com.example.userservice.dto.UserDTO;
+import com.example.userservice.entities.User;
 import org.mapstruct.Mapper;
 
 @Mapper(componentModel = "spring")

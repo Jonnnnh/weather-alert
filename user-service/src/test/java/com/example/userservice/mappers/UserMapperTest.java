@@ -1,17 +1,17 @@
-package com.example.models.mappers;
+package com.example.userservice.mappers;
 
-import com.example.models.dto.UserDTO;
-import com.example.models.entities.User;
+import com.example.userservice.dto.UserDTO;
+import com.example.userservice.entities.User;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import java.util.UUID;
 import java.time.LocalDateTime;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest

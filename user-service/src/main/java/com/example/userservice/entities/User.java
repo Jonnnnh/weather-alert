@@ -1,7 +1,8 @@
-package com.example.models.entities;
+package com.example.userservice.entities;
 
+import jakarta.persistence.*;
+import jakarta.persistence.GeneratedValue;
 import lombok.*;
-import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -25,6 +26,10 @@ public class User {
 
     @Column(name = "updated_at", nullable = false)
     private LocalDateTime updatedAt;
+
+    @Column(name = "city", nullable = false)
+    private String city;
+
 
 
     @PrePersist
