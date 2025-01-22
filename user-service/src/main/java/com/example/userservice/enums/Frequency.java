@@ -1,4 +1,4 @@
-package com.example.models.enums;
+package com.example.userservice.enums;
 
 public enum Frequency {
     HOURLY,
