@@ -24,31 +24,14 @@ public class UserController {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> createUser(@RequestBody UserDTO userDTO) {
-        UserDTO createdUser = userService.createUser(userDTO);
-        return ResponseEntity.ok(createdUser);
-    }
-
-    @PutMapping("/{telegramId}")
-    public ResponseEntity<UserDTO> updateUser(@PathVariable String telegramId, @RequestBody UserDTO userDTO) {
-        Optional<UserDTO> existingUser = userService.getUserByTelegramId(telegramId);
-        if (existingUser.isPresent()) {
-            UserDTO updatedUser = userService.createUser(userDTO);
-            return ResponseEntity.ok(updatedUser);
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<UserDTO> createOrUpdateUser(@RequestBody UserDTO userDTO) {
+        UserDTO createdOrUpdatedUser = userService.createOrUpdateUser(userDTO);
+        return ResponseEntity.ok(createdOrUpdatedUser);
     }
 
     @DeleteMapping("/{telegramId}")
     public ResponseEntity<Void> deleteUser(@PathVariable String telegramId) {
-        Optional<UserDTO> userDTO = userService.getUserByTelegramId(telegramId);
-        if (userDTO.isPresent()) {
-            userService.deleteUserByTelegramId(telegramId);
-            return ResponseEntity.noContent().build();
-        } else {
-            return ResponseEntity.notFound().build();
-        }
+        userService.deleteUserByTelegramId(telegramId);
+        return ResponseEntity.noContent().build();
     }
 }
-
