@@ -27,7 +27,6 @@ public class UserServiceImpl implements UserService {
 
         user.setCity(userDTO.getCity());
         user.setFrequency(userDTO.getFrequency());
-        user.setAlerts(userDTO.getAlerts());
         user = userRepository.save(user);
 
         log.info("Пользователь сохранён или обновлён: {}", user);

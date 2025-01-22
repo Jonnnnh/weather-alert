@@ -28,9 +28,6 @@ public class User {
     @Column(name = "frequency", nullable = false, length = 20)
     private Frequency frequency;
 
-    @Column(name = "alerts", columnDefinition = "jsonb", nullable = false)
-    private String alerts;
-
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 

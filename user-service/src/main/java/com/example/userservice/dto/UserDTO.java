@@ -15,7 +15,6 @@ public class UserDTO {
     private String telegramId;
     private String city;
     private Frequency frequency;
-    private String alerts;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 }
