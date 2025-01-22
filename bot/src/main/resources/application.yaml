@@ -1,6 +1,11 @@
 spring:
   config:
     import: "optional:classpath:.properties"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/weather_bot
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
 
 app:
   application-name: botService
