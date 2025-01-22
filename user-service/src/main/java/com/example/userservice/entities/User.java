@@ -1,7 +1,7 @@
 package com.example.userservice.entities;
 
+import com.example.userservice.enums.Frequency;
 import jakarta.persistence.*;
-import jakarta.persistence.GeneratedValue;
 import lombok.*;
 import java.time.LocalDateTime;
 import java.util.UUID;
@@ -20,6 +20,16 @@ public class User {
 
     @Column(name = "telegram_id", unique = true, nullable = false, length = 50)
     private String telegramId;
+
+    @Column(name = "city", nullable = false, length = 100)
+    private String city;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "frequency", nullable = false, length = 20)
+    private Frequency frequency;
+
+    @Column(name = "alerts", columnDefinition = "jsonb", nullable = false)
+    private String alerts;
 
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
