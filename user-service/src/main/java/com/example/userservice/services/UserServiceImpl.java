@@ -19,23 +19,33 @@ public class UserServiceImpl implements UserService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDTO createUser(UserDTO userDTO) {
-        User user = userMapper.toEntity(userDTO);
+    public UserDTO createOrUpdateUser(UserDTO userDTO) {
+        Optional<User> existingUser = userRepository.findByTelegramId(userDTO.getTelegramId());
+        User user = existingUser.orElseGet(() -> User.builder()
+                .telegramId(userDTO.getTelegramId())
+                .build());
+
+        user.setCity(userDTO.getCity());
+        user.setFrequency(userDTO.getFrequency());
+        user.setAlerts(userDTO.getAlerts());
         user = userRepository.save(user);
+
+        log.info("Пользователь сохранён или обновлён: {}", user);
         return userMapper.toDTO(user);
     }
 
     @Override
     public Optional<UserDTO> getUserByTelegramId(String telegramId) {
-        log.info("Получение пользователя по id");
+        log.info("Получение пользователя по Telegram ID: {}", telegramId);
         return userRepository.findByTelegramId(telegramId).map(userMapper::toDTO);
     }
 
     @Override
     public void deleteUserByTelegramId(String telegramId) {
         userRepository.findByTelegramId(telegramId)
-                .ifPresent(userRepository::delete);
+                .ifPresent(user -> {
+                    userRepository.delete(user);
+                    log.info("Пользователь удалён: {}", telegramId);
+                });
     }
-
 }
-

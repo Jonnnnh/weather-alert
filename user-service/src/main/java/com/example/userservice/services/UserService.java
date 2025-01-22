@@ -5,7 +5,7 @@ import com.example.userservice.dto.UserDTO;
 import java.util.Optional;
 
 public interface UserService {
-    UserDTO createUser(UserDTO userDTO);
+    UserDTO createOrUpdateUser(UserDTO userDTO);
     Optional<UserDTO> getUserByTelegramId(String telegramId);
     void deleteUserByTelegramId(String telegramId);
 
