@@ -18,7 +18,7 @@ class ApplicationConfigTest {
     void testConfigLoadedFromEnv() {
         assertNotNull(applicationConfig);
 
-        assertEquals("tgBotService", applicationConfig.applicationName());
+        assertEquals("botService", applicationConfig.applicationName());
 
         assertNotNull(applicationConfig.server());
         assertEquals(8080, applicationConfig.server().port());
