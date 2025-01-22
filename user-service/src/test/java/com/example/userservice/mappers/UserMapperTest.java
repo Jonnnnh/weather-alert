@@ -2,6 +2,7 @@ package com.example.userservice.mappers;
 
 import com.example.userservice.dto.UserDTO;
 import com.example.userservice.entities.User;
+import com.example.userservice.enums.Frequency;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class UserMapperTest {
         User user = User.builder()
                 .id(userId)
                 .telegramId("123456789")
+                .city("London")
+                .frequency(Frequency.DAILY)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
@@ -36,6 +39,8 @@ public class UserMapperTest {
 
         assertEquals(userId, userDTO.getId());
         assertEquals("123456789", userDTO.getTelegramId());
+        assertEquals("London", userDTO.getCity());
+        assertEquals(Frequency.DAILY, userDTO.getFrequency());
         assertEquals(now, userDTO.getCreatedAt());
         assertEquals(now, userDTO.getUpdatedAt());
     }
@@ -48,6 +53,8 @@ public class UserMapperTest {
         UserDTO userDTO = UserDTO.builder()
                 .id(userId)
                 .telegramId("123456789")
+                .city("London")
+                .frequency(Frequency.DAILY)
                 .createdAt(now)
                 .updatedAt(now)
                 .build();
@@ -56,6 +63,8 @@ public class UserMapperTest {
 
         assertEquals(userId, user.getId());
         assertEquals("123456789", user.getTelegramId());
+        assertEquals("London", user.getCity());
+        assertEquals(Frequency.DAILY, user.getFrequency());
         assertEquals(now, user.getCreatedAt());
         assertEquals(now, user.getUpdatedAt());
     }
