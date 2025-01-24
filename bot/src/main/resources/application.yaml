@@ -1,5 +1,12 @@
 spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+---
+spring:
   config:
+    activate:
+      on-profile: dev
     import: "optional:classpath:.properties"
   datasource:
     url: jdbc:postgresql://localhost:5432/weather_bot
@@ -23,3 +30,34 @@ logging:
     org.springframework.boot.context.properties: TRACE
     org.springframework.boot.context.config: DEBUG
 
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: "optional:classpath:.properties"
+  datasource:
+    url: jdbc:postgresql://db:5432/weather_bot
+    username: postgres
+    password: pass
+    driver-class-name: org.postgresql.Driver
+
+app:
+  application-name: botService
+  server:
+    port: 8080
+  logging:
+    root-level: info
+    bot-level: debug
+  telegram:
+    bot-name: Weather_Big_Bot
+    token: ${TOKEN}
+
+logging:
+  level:
+    org.springframework.boot.context.properties: TRACE
+    org.springframework.boot.context.config: DEBUG
+    com.example.bot.telegram: DEBUG
+    com.example.bot.clients: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot: INFO
