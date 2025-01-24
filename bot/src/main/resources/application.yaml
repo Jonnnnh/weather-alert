@@ -14,11 +14,6 @@ app:
   logging:
     root-level: info
     bot-level: debug
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
   telegram:
     bot-name: Weather_Big_Bot
     token: ${TOKEN}
