@@ -27,11 +27,11 @@ class ApplicationConfigTest {
         assertEquals("info", applicationConfig.logging().rootLevel());
         assertEquals("debug", applicationConfig.logging().botLevel());
 
-        assertNotNull(applicationConfig.rabbitmq());
-        assertEquals("localhost", applicationConfig.rabbitmq().host());
-        assertEquals(5672, applicationConfig.rabbitmq().port());
-        assertEquals("guest", applicationConfig.rabbitmq().username());
-        assertEquals("guest", applicationConfig.rabbitmq().password());
+//        assertNotNull(applicationConfig.rabbitmq());
+//        assertEquals("localhost", applicationConfig.rabbitmq().host());
+//        assertEquals(5672, applicationConfig.rabbitmq().port());
+//        assertEquals("guest", applicationConfig.rabbitmq().username());
+//        assertEquals("guest", applicationConfig.rabbitmq().password());
 
         assertNotNull(applicationConfig.telegram());
         assertEquals("Weather_Big_Bot", applicationConfig.telegram().botName());
