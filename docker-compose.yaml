@@ -1,0 +1,60 @@
+services:
+  user-service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: userservice
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/weather_bot
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=pass
+    ports:
+      - "8081:8081"
+    depends_on:
+      - db
+
+  bot:
+    build:
+      context: ./bot
+      dockerfile: Dockerfile
+    container_name: bot
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/weather_bot
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=pass
+    ports:
+      - "8080:8080"
+    depends_on:
+      - user-service
+      - db
+
+  data-migration-service:
+    build:
+      context: ./data-migration-service
+      dockerfile: Dockerfile
+    container_name: data-migration-service
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DATABASE_URL=jdbc:postgresql://db:5432/weather_bot
+      - DATABASE_USERNAME=postgres
+      - DATABASE_PASSWORD=pass
+    depends_on:
+      - db
+    command: ["java", "-jar", "/app.jar"]
+
+  db:
+    image: postgres:16
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=weather_bot
+    ports:
+      - "5432:5432"
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
