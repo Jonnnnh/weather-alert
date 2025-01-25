@@ -2,6 +2,7 @@ package com.example.bot.telegram.commands;
 
 import com.example.bot.clients.UserServiceClient;
 import com.example.bot.dto.UserDTO;
+import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
@@ -25,7 +26,7 @@ public class SetCityCommand implements Command {
         String city = parseCityFromCommand(text);
         if (city == null) {
             log.warn("Город не указан в команде /setcity для chatId: {}", chatId);
-            return new SendMessage(chatId, "Пожалуйста, укажите город: /setcity <город>");
+            return new SendMessage(chatId, ReplyMessages.SET_CITY_PROMPT.getMessage());
         }
 
         try {
@@ -35,14 +36,14 @@ public class SetCityCommand implements Command {
                 userDTO.setCity(city);
                 userServiceClient.createOrUpdateUser(userDTO);
                 log.info("Город пользователя {} обновлен до: {}", chatId, city);
-                return new SendMessage(chatId, "Ваш город был успешно обновлен на: " + city);
+                return new SendMessage(chatId, ReplyMessages.CITY_UPDATED.getMessage());
             } else {
                 log.warn("Пользователь {} не найден для команды /setcity", chatId);
-                return new SendMessage(chatId, "Пользователь не найден. Пожалуйста, сначала используйте команду /start");
+                return new SendMessage(chatId, ReplyMessages.USER_NOT_FOUND.getMessage());
             }
         } catch (Exception e) {
             log.error("Ошибка при обновлении города для пользователя {}: {}", chatId, e.getMessage(), e);
-            return new SendMessage(chatId, "Произошла ошибка при обновлении города. Пожалуйста, повторите позже");
+            return new SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage());
         }
     }
 

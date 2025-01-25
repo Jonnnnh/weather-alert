@@ -1,6 +1,7 @@
 package com.example.bot.telegram.listener;
 
 import com.example.bot.telegram.handler.UpdateHandler;
+import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
@@ -27,7 +28,7 @@ public class BotUpdatesListener {
                 } catch (Exception e) {
                     String chatId = String.valueOf(update.message().chat().id());
                     log.error("Ошибка при обработке обновления для chatId {}: {}", chatId, e.getMessage(), e);
-                    telegramBot.execute(new com.pengrad.telegrambot.request.SendMessage(chatId, "Произошла ошибка. Пожалуйста, повторите позже"));
+                    telegramBot.execute(new com.pengrad.telegrambot.request.SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage()));
                 }
             }
             return UpdatesListener.CONFIRMED_UPDATES_ALL;

@@ -3,6 +3,7 @@ package com.example.bot.telegram.commands;
 import com.example.bot.clients.UserServiceClient;
 import com.example.bot.dto.UserDTO;
 import com.example.bot.enums.Frequency;
+import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
@@ -21,14 +22,12 @@ public class StartCommand implements Command {
     @Override
     public SendMessage handle(Update update) {
         String chatId = update.message().chat().id().toString();
-        String text = update.message().text().toLowerCase();
-
         log.info("Получена команда /start для chatId: {}", chatId);
 
         var existingUser = userServiceClient.getUserByTelegramId(chatId);
         if (existingUser.isPresent()) {
             log.info("Пользователь {} уже зарегистрирован", chatId);
-            return new SendMessage(chatId, "Вы уже зарегистрированы. Пожалуйста, введите ваш город");
+            return new SendMessage(chatId, ReplyMessages.USER_ALREADY_REGISTERED.getMessage());
         }
 
         UserDTO newUser = UserDTO.builder()
@@ -45,9 +44,9 @@ public class StartCommand implements Command {
             log.info("Пользователь {} успешно зарегистрирован", chatId);
         } catch (Exception e) {
             log.error("Ошибка при регистрации пользователя {}: {}", chatId, e.getMessage(), e);
-            return new SendMessage(chatId, "Произошла ошибка при регистрации. Пожалуйста, повторите позже");
+            return new SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage());
         }
 
-        return new SendMessage(chatId, "Добро пожаловать! Вы успешно зарегистрированы. Пожалуйста, введите ваш город: /setcity <город>");
+        return new SendMessage(chatId, ReplyMessages.WELCOME_MESSAGE.getMessage());
     }
 }
