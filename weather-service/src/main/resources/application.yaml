@@ -1,0 +1,69 @@
+server:
+  port: 8083
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+rabbitmq:
+  port: 5672
+  username: "guest"
+  password: "guest"
+
+debug: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: "optional:classpath:.properties"
+  datasource:
+    url: jdbc:postgresql://localhost:5432/weather_bot
+    username: postgres
+    password: pass
+
+weather-api:
+  api-key: ${WEATHER_API_KEY}
+  host: ${WEATHER_API_HOST}
+  endpoint: ${WEATHER_API_ENDPOINT}
+
+rabbitmq:
+  exchange: "weather-notifications-dev"
+  queue: "weather-notifications-dev"
+  key: "weather.key.dev"
+  dlx: "weather.dead-letter-exchange-dev"
+  host: "rabbitmq-dev"
+
+debug: true
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+    import: "optional:classpath:.properties"
+  datasource:
+    url: jdbc:postgresql://db:5432/weather_bot
+    username: postgres
+    password: pass
+
+weather-api:
+  api-key: ${WEATHER_API_KEY}
+  host: ${WEATHER_API_HOST}
+  endpoint: ${WEATHER_API_ENDPOINT}
+
+rabbitmq:
+  exchange: "weather-notifications"
+  queue: "weather-notifications"
+  key: "weather.key"
+  dlx: "weather.dead-letter-exchange"
+  host: "rabbitmq"
+
+debug: false
