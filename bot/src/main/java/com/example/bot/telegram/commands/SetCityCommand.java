@@ -1,7 +1,6 @@
 package com.example.bot.telegram.commands;
 
-import com.example.bot.clients.UserServiceClient;
-import com.example.bot.dto.UserDTO;
+import com.example.bot.service.UserCityService;
 import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
@@ -14,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class SetCityCommand implements Command {
 
-    private final UserServiceClient userServiceClient;
+    private final UserCityService userCityService;
 
     @Override
     public SendMessage handle(Update update) {
@@ -29,21 +28,11 @@ public class SetCityCommand implements Command {
             return new SendMessage(chatId, ReplyMessages.SET_CITY_PROMPT.getMessage());
         }
 
-        try {
-            var existingUser = userServiceClient.getUserByTelegramId(chatId);
-            if (existingUser.isPresent()) {
-                UserDTO userDTO = existingUser.get();
-                userDTO.setCity(city);
-                userServiceClient.createOrUpdateUser(userDTO);
-                log.info("Город пользователя {} обновлен до: {}", chatId, city);
-                return new SendMessage(chatId, ReplyMessages.CITY_UPDATED.getMessage());
-            } else {
-                log.warn("Пользователь {} не найден для команды /setcity", chatId);
-                return new SendMessage(chatId, ReplyMessages.USER_NOT_FOUND.getMessage());
-            }
-        } catch (Exception e) {
-            log.error("Ошибка при обновлении города для пользователя {}: {}", chatId, e.getMessage(), e);
-            return new SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage());
+        boolean isUpdated = userCityService.updateCity(chatId, city);
+        if (isUpdated) {
+            return new SendMessage(chatId, ReplyMessages.CITY_UPDATED.getMessage());
+        } else {
+            return new SendMessage(chatId, ReplyMessages.USER_NOT_FOUND.getMessage());
         }
     }
 
