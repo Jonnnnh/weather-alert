@@ -1,10 +1,13 @@
 package com.example.bot.clients;
 
 import com.example.bot.dto.UserDTO;
+import com.example.bot.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.Optional;
 
@@ -13,28 +16,23 @@ import java.util.Optional;
 @Slf4j
 public class UserServiceClientImpl implements UserServiceClient {
 
-    private final WebClient.Builder webClientBuilder;
-
-    private static final String USER_SERVICE_URL = "http://userservice:8081";
+    private final RestTemplate restTemplate;
+    private final String userServiceUrl = "http://userservice:8081";
+    private static final String GET_USER_PATH = "/users/";
 
     @Override
     public Optional<UserDTO> getUserByTelegramId(String telegramId) {
-        log.info("Попытка получить пользователя с Telegram ID: {}", telegramId);
+        String url = userServiceUrl + GET_USER_PATH + telegramId;
         try {
-            UserDTO userDTO = webClientBuilder.build()
-                    .get()
-                    .uri(USER_SERVICE_URL + "/users/" + telegramId)
-                    .retrieve()
-                    .bodyToMono(UserDTO.class)
-                    .block();
-
-            if (userDTO != null) {
-                log.info("Пользователь с Telegram ID: {} успешно найден", telegramId);
-                return Optional.of(userDTO);
+            ResponseEntity<UserDTO> response = restTemplate.getForEntity(url, UserDTO.class);
+            if (response.getBody() != null) {
+                return Optional.of(response.getBody());
             } else {
-                log.warn("Пользователь с Telegram ID: {} не найден", telegramId);
-                return Optional.empty();
+                throw new UserNotFoundException("Пользователь с Telegram ID " + telegramId + " не найден");
             }
+        } catch (UserNotFoundException e) {
+            log.warn(e.getMessage());
+            throw e;
         } catch (Exception e) {
             log.error("Произошла ошибка при получении пользователя с Telegram ID: {}. Ошибка: {}", telegramId, e.getMessage(), e);
             return Optional.empty();
@@ -43,17 +41,11 @@ public class UserServiceClientImpl implements UserServiceClient {
 
     @Override
     public void createOrUpdateUser(UserDTO userDTO) {
-        log.info("Попытка создать или обновить пользователя с Telegram ID: {}", userDTO.getTelegramId());
+        String url = userServiceUrl + "/users";
         try {
-            userDTO = webClientBuilder.build()
-                    .post()
-                    .uri(USER_SERVICE_URL + "/users")
-                    .bodyValue(userDTO)
-                    .retrieve()
-                    .bodyToMono(UserDTO.class)
-                    .block();
-
-            if (userDTO != null) {
+            HttpEntity<UserDTO> request = new HttpEntity<>(userDTO);
+            ResponseEntity<UserDTO> response = restTemplate.postForEntity(url, request, UserDTO.class);
+            if (response.getBody() != null) {
                 log.info("Пользователь с Telegram ID: {} успешно создан/обновлен", userDTO.getTelegramId());
             } else {
                 log.warn("Не удалось создать/обновить пользователя с Telegram ID: {}", userDTO.getTelegramId());
@@ -63,3 +55,4 @@ public class UserServiceClientImpl implements UserServiceClient {
         }
     }
 }
+
