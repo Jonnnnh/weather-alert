@@ -13,6 +13,7 @@ public enum ReplyMessages {
     USER_ALREADY_REGISTERED("You are already registered. Please enter your city"),
     SET_CITY_PROMPT("Please enter your city using /setcity <city>"),
     INVALID_COMMAND_FORMAT("Invalid command format. Please use the correct format"),
+    CHAT_ID_NOT_FOUND("Chat ID not found"),
     USER_NOT_FOUND("User not found");
 
     private final String message;
