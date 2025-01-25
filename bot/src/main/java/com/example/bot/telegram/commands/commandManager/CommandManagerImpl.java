@@ -4,11 +4,9 @@ import com.example.bot.telegram.commands.Command;
 import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
-import org.springframework.beans.factory.annotation.Autowired;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import java.util.HashMap;
 import java.util.Map;
 
 
@@ -17,14 +15,6 @@ import java.util.Map;
 public class CommandManagerImpl implements CommandManager {
 
     private final Map<String, Command> commandMap;
-
-    @Autowired
-    public CommandManagerImpl(Command startCommand, Command helpCommand, Command setCityCommand) {
-        this.commandMap = new HashMap<>();
-        this.commandMap.put("start", startCommand);
-        this.commandMap.put("help", helpCommand);
-        this.commandMap.put("setcity", setCityCommand);
-    }
 
     @Override
     public SendMessage handleCommand(Update update) {
