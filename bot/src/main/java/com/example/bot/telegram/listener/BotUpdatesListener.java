@@ -5,6 +5,7 @@ import com.example.bot.telegram.reply.ReplyMessages;
 import com.pengrad.telegrambot.TelegramBot;
 import com.pengrad.telegrambot.UpdatesListener;
 import com.pengrad.telegrambot.model.Update;
+import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -28,7 +29,7 @@ public class BotUpdatesListener {
                 } catch (Exception e) {
                     String chatId = String.valueOf(update.message().chat().id());
                     log.error("Ошибка при обработке обновления для chatId {}: {}", chatId, e.getMessage(), e);
-                    telegramBot.execute(new com.pengrad.telegrambot.request.SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage()));
+                    telegramBot.execute(new SendMessage(chatId, ReplyMessages.ERROR_OCCURRED.getMessage()));
                 }
             }
             return UpdatesListener.CONFIRMED_UPDATES_ALL;
