@@ -21,16 +21,21 @@ public class UserRegistrationService {
     }
 
     public void registerNewUser(String chatId) {
-        UserDTO newUser = UserDTO.builder()
-                .telegramId(chatId)
-                .city("не указан")
-                .frequency(Frequency.DAILY)
-                .createdAt(LocalDateTime.now())
-                .updatedAt(LocalDateTime.now())
-                .build();
+        try {
+            UserDTO newUser = UserDTO.builder()
+                    .telegramId(chatId)
+                    .city("не указан")
+                    .frequency(Frequency.DAILY)
+                    .createdAt(LocalDateTime.now())
+                    .updatedAt(LocalDateTime.now())
+                    .build();
 
-        log.info("Регистрация нового пользователя: {}", chatId);
-        userServiceClient.createOrUpdateUser(newUser);
-        log.info("Пользователь {} успешно зарегистрирован", chatId);
+            log.info("Регистрация нового пользователя: {}", chatId);
+            userServiceClient.createOrUpdateUser(newUser);
+            log.info("Пользователь {} успешно зарегистрирован", chatId);
+        } catch (Exception e) {
+            log.error("Ошибка при регистрации пользователя с chatId {}: {}", chatId, e.getMessage());
+            throw new RuntimeException("Ошибка при регистрации нового пользователя", e);
+        }
     }
 }

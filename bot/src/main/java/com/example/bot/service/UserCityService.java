@@ -2,6 +2,7 @@ package com.example.bot.service;
 
 import com.example.bot.clients.UserServiceClient;
 import com.example.bot.dto.UserDTO;
+import com.example.bot.exceptions.UserNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,8 +23,8 @@ public class UserCityService {
             log.info("Город пользователя {} обновлен до: {}", chatId, city);
             return true;
         } else {
-            log.warn("Пользователь с chatId {} не найден для обновления города", chatId);
-            return false;
+            log.error("Пользователь с chatId {} не найден для обновления города", chatId);
+            throw new UserNotFoundException("Пользователь с chatId " + chatId + " не найден для обновления города");
         }
     }
 }
