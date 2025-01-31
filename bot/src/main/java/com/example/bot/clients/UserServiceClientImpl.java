@@ -2,6 +2,7 @@ package com.example.bot.clients;
 
 import com.example.bot.dto.UserDTO;
 import com.example.bot.exceptions.UserNotFoundException;
+import com.example.bot.exceptions.UserServiceException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -31,11 +32,12 @@ public class UserServiceClientImpl implements UserServiceClient {
                 throw new UserNotFoundException("Пользователь с Telegram ID " + telegramId + " не найден");
             }
         } catch (UserNotFoundException e) {
-            log.warn(e.getMessage());
+            log.error("Ошибка: {}", e.getMessage());
             throw e;
         } catch (Exception e) {
-            log.error("Произошла ошибка при получении пользователя с Telegram ID: {}. Ошибка: {}", telegramId, e.getMessage(), e);
-            return Optional.empty();
+            String errorMessage = "Произошла ошибка при получении пользователя с Telegram ID: " + telegramId;
+            log.error("{}. Ошибка: {}", errorMessage, e.getMessage(), e);
+            throw new UserServiceException(errorMessage, e);
         }
     }
 
@@ -48,11 +50,14 @@ public class UserServiceClientImpl implements UserServiceClient {
             if (response.getBody() != null) {
                 log.info("Пользователь с Telegram ID: {} успешно создан/обновлен", userDTO.getTelegramId());
             } else {
-                log.warn("Не удалось создать/обновить пользователя с Telegram ID: {}", userDTO.getTelegramId());
+                String errorMessage = "Не удалось создать/обновить пользователя с Telegram ID: " + userDTO.getTelegramId();
+                log.error(errorMessage);
+                throw new UserServiceException(errorMessage);
             }
         } catch (Exception e) {
-            log.error("Произошла ошибка при создании/обновлении пользователя с Telegram ID: {}. Ошибка: {}", userDTO.getTelegramId(), e.getMessage(), e);
+            String errorMessage = "Произошла ошибка при создании/обновлении пользователя с Telegram ID: " + userDTO.getTelegramId();
+            log.error("{}. Ошибка: {}", errorMessage, e.getMessage(), e);
+            throw new UserServiceException(errorMessage, e);
         }
     }
 }
-
