@@ -14,7 +14,9 @@ public enum ReplyMessages {
     SET_CITY_PROMPT("Please enter your city using /setcity <city>"),
     INVALID_COMMAND_FORMAT("Invalid command format. Please use the correct format"),
     CHAT_ID_NOT_FOUND("Chat ID not found"),
-    USER_NOT_FOUND("User not found");
+    USER_NOT_FOUND("User not found"),
+    WEATHER_DATA_ERROR("Failed to retrieve weather data"),
+    CITY_NOT_SET("You have not set your city. Use /setcity to set your city");
 
     private final String message;
 
