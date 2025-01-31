@@ -11,11 +11,12 @@ import java.util.Map;
 public class CommandConfig {
 
     @Bean
-    public Map<String, Command> commandMap(HelpCommand helpCommand, StartCommand startCommand, SetCityCommand setCityCommand) {
+    public Map<String, Command> commandMap(HelpCommand helpCommand, StartCommand startCommand, SetCityCommand setCityCommand, GetWeatherCommand getWeatherCommand) {
         Map<String, Command> commands = new HashMap<>();
         commands.put("start", startCommand);
         commands.put("help", helpCommand);
         commands.put("setcity", setCityCommand);
+        commands.put("getweather", getWeatherCommand);
         return commands;
     }
 }
