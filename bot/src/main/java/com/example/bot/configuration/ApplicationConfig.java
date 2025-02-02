@@ -10,13 +10,9 @@ import org.springframework.validation.annotation.Validated;
 @ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
 public record ApplicationConfig(
         @NotBlank String applicationName,
-        @NotNull ServerConfig server,
-        @NotNull LoggingConfig logging,
-//        @NotNull RabbitMQConfig rabbitmq,
+        @NotNull RabbitMQConfig rabbitmq,
         @NotNull TelegramConfig telegram
 ) {
-    public record ServerConfig(@Positive Integer port) {}
-    public record LoggingConfig(@NotBlank String rootLevel, @NotBlank String botLevel) {}
-//    public record RabbitMQConfig(@NotBlank String host, @Positive Integer port, @NotBlank String username, @NotBlank String password) {}
+    public record RabbitMQConfig(@NotBlank String weatherQueue, @NotBlank String userQueue, @NotBlank String dlx, @NotBlank String weatherKey,@NotBlank String userKey) {}
     public record TelegramConfig(@NotBlank String botName, @NotBlank String token) {}
 }
