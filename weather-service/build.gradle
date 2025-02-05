@@ -32,7 +32,7 @@ dependencies {
 
     implementation 'org.springframework.boot:spring-boot-starter-logging'
     implementation 'org.slf4j:slf4j-api:2.0.9'
-
+    testImplementation 'org.testcontainers:rabbitmq:1.26.0'
     implementation 'jakarta.validation:jakarta.validation-api:3.1.0'
     implementation 'jakarta.annotation:jakarta.annotation-api:2.1.1'
     testImplementation 'jakarta.servlet:jakarta.servlet-api:5.0.0'
