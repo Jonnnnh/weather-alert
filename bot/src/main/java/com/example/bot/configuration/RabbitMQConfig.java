@@ -9,33 +9,33 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class RabbitMQConfig {
 
-    private ApplicationConfig applicationConfig;
+    private ApplicationProperties applicationProperties;
     @Bean
     public Queue weatherRequestQueue() {
-        return new Queue(applicationConfig.rabbitmq().weatherQueue(), true);
+        return new Queue(applicationProperties.rabbitmq().weatherQueue(), true);
     }
 
     @Bean
     public Queue userUpdateQueue() {
-        return new Queue(applicationConfig.rabbitmq().userQueue(), true);
+        return new Queue(applicationProperties.rabbitmq().userQueue(), true);
     }
 
     @Bean
     public DirectExchange weatherExchange() {
-        return new DirectExchange(applicationConfig.rabbitmq().dlx());
+        return new DirectExchange(applicationProperties.rabbitmq().dlx());
     }
 
     @Bean
     public Binding weatherRequestBinding() {
         return BindingBuilder.bind(weatherRequestQueue())
                 .to(weatherExchange())
-                .with(applicationConfig.rabbitmq().weatherKey());
+                .with(applicationProperties.rabbitmq().weatherKey());
     }
 
     @Bean
     public Binding userUpdateBinding() {
         return BindingBuilder.bind(userUpdateQueue())
                 .to(weatherExchange())
-                .with(applicationConfig.rabbitmq().userKey());
+                .with(applicationProperties.rabbitmq().userKey());
     }
 }

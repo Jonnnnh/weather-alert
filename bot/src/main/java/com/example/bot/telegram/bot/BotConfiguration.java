@@ -1,7 +1,7 @@
 package com.example.bot.telegram.bot;
 
 import com.pengrad.telegrambot.TelegramBot;
-import  com.example.bot.configuration.ApplicationConfig;
+import com.example.bot.configuration.ApplicationProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class BotConfiguration {
 
-    private final ApplicationConfig applicationConfig;
+    private final ApplicationProperties applicationConfig;
 
     @Bean
     public TelegramBot telegramBot() {

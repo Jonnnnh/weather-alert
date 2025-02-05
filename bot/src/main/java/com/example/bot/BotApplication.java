@@ -1,12 +1,12 @@
 package com.example.bot;
 
-import com.example.bot.configuration.ApplicationConfig;
+import com.example.bot.configuration.ApplicationProperties;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 
 @SpringBootApplication
-@EnableConfigurationProperties(ApplicationConfig.class)
+@EnableConfigurationProperties(ApplicationProperties.class)
 public class BotApplication {
 
     public static void main(String[] args) {
