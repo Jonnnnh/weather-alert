@@ -1,3 +1,8 @@
+server:
+  port: 8080
+  error:
+    include-message: always
+
 spring:
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
@@ -16,16 +21,24 @@ app:
     bot-name: Weather_Big_Bot
     token: ${TOKEN}
   rabbitmq:
-    weather-queue: weather-request-queue.queue
-    user-queue: user-update-queue.queue
+    weather-queue: weatherRequestQueue
+    user-queue: userUpdateQueue
     dlx: weather-exchange.dlx
     weather-key: weather-routing-key
     user-key: user-routing-key
 
+grpc:
+  client:
+    userService:
+      address: "localhost:9090"
+      negotiationType: plaintext
+
 logging:
   level:
-    org.springframework.boot.context.properties: TRACE
-    org.springframework.boot.context.config: DEBUG
+    com.example.bot.configuration.MessageConverterConfig: DEBUG
+    com.example.bot.configuration.GrpcUserServiceClientConfiguration: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot: INFO
 
 ---
 spring:

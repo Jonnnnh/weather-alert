@@ -6,8 +6,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   jpa:
     hibernate:
-      ddl-auto: update
-    show-sql: true
+      ddl-auto: none
   profiles:
     active: ${SPRING_PROFILES_ACTIVE:dev}
   rabbitmq:
@@ -15,9 +14,18 @@ spring:
     port: 5672
     username: guest
     password: guest
+  json:
+    trusted:
+      packages: com.example.weatherservice.dto.WeatherDataDto
 
-debug: true
-
+logging:
+  level:
+    com.example.weatherservice.services.WeatherService: DEBUG
+app:
+  rabbitmq:
+    weather-queue: weatherRequestQueue
+    dlx: weather-exchange.dlx
+    weather-key: weather-routing-key
 ---
 spring:
   config:
@@ -34,12 +42,7 @@ weather-api:
   host: ${WEATHER_API_HOST}
   endpoint: ${WEATHER_API_ENDPOINT}
 
-rabbitmq:
-  queue: weather-request-queue.queue
-  dlx: weather-exchange.dlx
-  key: weather-routing-key
-
-debug: true
+debug: false
 
 ---
 spring:
@@ -56,10 +59,5 @@ weather-api:
   api-key: ${WEATHER_API_KEY}
   host: ${WEATHER_API_HOST}
   endpoint: ${WEATHER_API_ENDPOINT}
-
-rabbitmq:
-  queue: weather-request-queue.queue
-  dlx: weather-exchange.dlx
-  key: weather-routing-key
 
 debug: false
