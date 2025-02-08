@@ -12,19 +12,19 @@ public class RabbitMQConfig {
     private final ApplicationProperties properties;
 
     @Bean
-    public Queue weatherQueue() {
-        return new Queue(properties.queue(), true);
+    public Queue weatherRequestQueue() {
+        return new Queue(properties.rabbitmq().weatherQueue(), true);
     }
 
     @Bean
     public DirectExchange weatherExchange() {
-        return new DirectExchange(properties.exchange());
+        return new DirectExchange(properties.rabbitmq().dlx());
     }
 
     @Bean
     public Binding binding() {
-        return BindingBuilder.bind(weatherQueue())
+        return BindingBuilder.bind(weatherRequestQueue())
                 .to(weatherExchange())
-                .with(properties.key());
+                .with(properties.rabbitmq().weatherKey());
     }
 }
