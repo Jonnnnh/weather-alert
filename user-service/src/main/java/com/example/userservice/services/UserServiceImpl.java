@@ -28,15 +28,23 @@ public class UserServiceImpl implements UserService {
         user.setCity(userDTO.getCity());
         user.setFrequency(userDTO.getFrequency());
         user = userRepository.save(user);
-
-        log.info("Пользователь сохранён или обновлён: {}", user);
         return userMapper.toDTO(user);
     }
 
     @Override
     public Optional<UserDTO> getUserByTelegramId(String telegramId) {
-        log.info("Получение пользователя по Telegram ID: {}", telegramId);
         return userRepository.findByTelegramId(telegramId).map(userMapper::toDTO);
+    }
+
+    @Override
+    public Optional<String> getCityByTelegramId(String telegramId) {
+        return userRepository.findByTelegramId(telegramId)
+                .map(User::getCity);
+    }
+
+    @Override
+    public boolean doesUserExist(String telegramId) {
+        return userRepository.findByTelegramId(telegramId).isPresent();
     }
 
     @Override
@@ -44,7 +52,7 @@ public class UserServiceImpl implements UserService {
         userRepository.findByTelegramId(telegramId)
                 .ifPresent(user -> {
                     userRepository.delete(user);
-                    log.info("Пользователь удалён: {}", telegramId);
+                    log.info("User Deleted: {}", telegramId);
                 });
     }
 }
