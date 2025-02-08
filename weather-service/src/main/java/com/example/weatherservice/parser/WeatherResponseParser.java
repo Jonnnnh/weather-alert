@@ -2,6 +2,7 @@ package com.example.weatherservice.parser;
 
 import com.example.weatherservice.dto.WeatherApiResponse;
 import com.example.weatherservice.dto.WeatherDataDto;
+import com.example.weatherservice.exception.WeatherDataParsingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 
@@ -29,7 +30,7 @@ public class WeatherResponseParser {
                     .recordedAt(LocalDateTime.now())
                     .build();
         } catch (Exception e) {
-            throw new RuntimeException("Error parsing Weather API response", e);
+            throw new WeatherDataParsingException("Error parsing Weather API response for city: " + city, e);
         }
     }
 }
