@@ -6,17 +6,11 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.validation.annotation.Validated;
 
 @Validated
-@ConfigurationProperties(prefix = "rabbitmq", ignoreUnknownFields = false)
-public record  ApplicationProperties(
-        @NotBlank String exchange,
-        @NotBlank String queue,
-        @NotBlank String key,
-        @NotBlank String dlx,
-        @NotBlank String host,
-        @NotNull Integer port,
-        @NotBlank String username,
-        @NotBlank String password
-) {
+@ConfigurationProperties(prefix = "app", ignoreUnknownFields = false)
+public record ApplicationProperties (
+        @NotNull RabbitMQConfig rabbitmq
+){
+    public record RabbitMQConfig(@NotBlank String weatherQueue, @NotBlank String dlx, @NotBlank String weatherKey) {}
 }
 
 
