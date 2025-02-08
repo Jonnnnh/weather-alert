@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 @Service
-public class FetchWeatherUseCaseImpl implements FetchWeatherUseCase {
+public class FetchWeatherImpl implements FetchWeather {
 
     private final WeatherService weatherService;
 

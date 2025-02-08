@@ -1,7 +1,7 @@
 package com.example.weatherservice.controller;
 
 import com.example.weatherservice.dto.WeatherDataDto;
-import com.example.weatherservice.service.FetchWeatherUseCase;
+import com.example.weatherservice.service.FetchWeather;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
@@ -14,12 +14,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class WeatherControllerTest {
 
-    private FetchWeatherUseCase fetchWeatherUseCase;
+    private FetchWeather fetchWeatherUseCase;
     private MockMvc mockMvc;
 
     @BeforeEach
     void setUp() {
-        fetchWeatherUseCase = mock(FetchWeatherUseCase.class);
+        fetchWeatherUseCase = mock(FetchWeather.class);
         WeatherController weatherController = new WeatherController(fetchWeatherUseCase);
         mockMvc = MockMvcBuilders.standaloneSetup(weatherController).build();
     }

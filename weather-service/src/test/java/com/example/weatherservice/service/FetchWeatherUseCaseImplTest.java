@@ -10,12 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class FetchWeatherUseCaseImplTest {
 
     private WeatherService weatherService;
-    private FetchWeatherUseCaseImpl fetchWeatherUseCase;
+    private FetchWeatherImpl fetchWeatherUseCase;
 
     @BeforeEach
     void setUp() {
         weatherService = mock(WeatherService.class);
-        fetchWeatherUseCase = new FetchWeatherUseCaseImpl(weatherService);
+        fetchWeatherUseCase = new FetchWeatherImpl(weatherService);
     }
 
     @Test
