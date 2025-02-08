@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "google/protobuf/timestamp.proto";
+
+option java_multiple_files = true;
+option java_package = "com.example.grpc.user";
+option java_outer_classname = "UserServiceProto";
+
+package com.example.grpc.user;
+
+service UserService {
+  rpc GetUserByTelegramId (GetUserByTelegramIdRequest) returns (GetUserByTelegramIdResponse);
+  rpc GetCityByTelegramId (GetUserByTelegramIdRequest) returns (GetCityByTelegramIdResponse);
+}
+
+message GetUserByTelegramIdRequest {
+  string telegramId = 1;
+}
+
+message GetUserByTelegramIdResponse {
+  bool found = 1;
+  string telegramId = 2;
+  string city = 3;
+  string frequency = 4;
+}
+
+message GetCityByTelegramIdResponse {
+  bool found = 1;
+  string city = 2;
+}
