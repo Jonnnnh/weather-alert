@@ -18,7 +18,7 @@ spring:
 app:
   application-name: botService
   telegram:
-    bot-name: Weather_Big_Bot
+    bot-name: Weather Bot
     token: ${TOKEN}
   rabbitmq:
     weather-queue: weatherRequestQueue
