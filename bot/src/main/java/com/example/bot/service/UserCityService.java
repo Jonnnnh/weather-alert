@@ -1,8 +1,7 @@
 package com.example.bot.service;
 
-import com.example.bot.clients.UserServiceClient;
 import com.example.bot.dto.UserDTO;
-import com.example.bot.exceptions.UserNotFoundException;
+import com.example.bot.enums.Frequency;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -12,20 +11,15 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class UserCityService {
 
-    private final UserServiceClient userServiceClient;
+    private final UserUpdateSender userUpdateSender;
 
-    public boolean updateCity(String chatId, String city) {
-        var existingUser = userServiceClient.getUserByTelegramId(chatId);
-        if (existingUser.isPresent()) {
-            UserDTO userDTO = existingUser.get();
-            userDTO.setCity(city);
-            userServiceClient.createOrUpdateUser(userDTO);
-            log.info("Город пользователя {} обновлен до: {}", chatId, city);
-            return true;
-        } else {
-            log.error("Пользователь с chatId {} не найден для обновления города", chatId);
-            throw new UserNotFoundException("Пользователь с chatId " + chatId + " не найден для обновления города");
-        }
+    public void updateCity(String chatId, String city) {
+        UserDTO dto = UserDTO.builder()
+                .telegramId(chatId)
+                .city(city)
+                .frequency(Frequency.DAILY)
+                .build();
+        userUpdateSender.sendUserUpdate(dto);
     }
 }
 
