@@ -7,7 +7,7 @@ public enum ReplyMessages {
 
     UNKNOWN_COMMAND("Unknown command. Use /help for available commands"),
     WELCOME_MESSAGE("Welcome! You have successfully registered. Please set your city using /setcity <city>"),
-    HELP_MESSAGE("Here are the available commands:\n/start - Register\n/help - Show help\n/setcity <city> - Set your city"),
+    HELP_MESSAGE("Here are the available commands:\n/start - Register\n/help - Show help\n/setcity <city> - Set your city\n/getweather - Get your weather"),
     CITY_UPDATED("Your city has been updated successfully"),
     ERROR_OCCURRED("An error occurred. Please try again later"),
     USER_ALREADY_REGISTERED("You are already registered. Please enter your city"),
