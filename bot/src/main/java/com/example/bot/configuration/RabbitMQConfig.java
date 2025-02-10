@@ -2,6 +2,8 @@ package com.example.bot.configuration;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
+import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -9,7 +11,13 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class RabbitMQConfig {
 
-    private ApplicationProperties applicationProperties;
+    private final ApplicationProperties applicationProperties;
+
+    @Bean
+    public RabbitAdmin rabbitAdmin(ConnectionFactory connectionFactory) {
+        return new RabbitAdmin(connectionFactory);
+    }
+
     @Bean
     public Queue weatherRequestQueue() {
         return new Queue(applicationProperties.rabbitmq().weatherQueue(), true);
@@ -26,16 +34,16 @@ public class RabbitMQConfig {
     }
 
     @Bean
-    public Binding weatherRequestBinding() {
-        return BindingBuilder.bind(weatherRequestQueue())
-                .to(weatherExchange())
+    public Binding weatherRequestBinding(Queue weatherRequestQueue, DirectExchange weatherExchange) {
+        return BindingBuilder.bind(weatherRequestQueue)
+                .to(weatherExchange)
                 .with(applicationProperties.rabbitmq().weatherKey());
     }
 
     @Bean
-    public Binding userUpdateBinding() {
-        return BindingBuilder.bind(userUpdateQueue())
-                .to(weatherExchange())
+    public Binding userUpdateBinding(Queue userUpdateQueue, DirectExchange weatherExchange) {
+        return BindingBuilder.bind(userUpdateQueue)
+                .to(weatherExchange)
                 .with(applicationProperties.rabbitmq().userKey());
     }
 }
