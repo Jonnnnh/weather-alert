@@ -1,6 +1,8 @@
 package com.example.userservice.controllers;
 
 import com.example.userservice.dto.UserDTO;
+import com.example.userservice.exception.CityNotFoundException;
+import com.example.userservice.exception.UserNotFoundException;
 import com.example.userservice.services.UserService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -43,15 +45,34 @@ class UserControllerTest {
     }
 
     @Test
-    void getUserByTelegramId_shouldReturnNotFoundIfUserDoesNotExist() {
+    void getUserByTelegramId_shouldThrowUserNotFoundExceptionIfUserDoesNotExist() {
         String telegramId = "123";
 
         when(userService.getUserByTelegramId(telegramId)).thenReturn(Optional.empty());
 
-        ResponseEntity<UserDTO> response = userController.getUserByTelegramId(telegramId);
+        assertThrows(UserNotFoundException.class, () -> userController.getUserByTelegramId(telegramId));
+    }
 
-        assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-        assertNull(response.getBody());
+    @Test
+    void getCityByTelegramId_shouldReturnCityIfExists() {
+        String telegramId = "123";
+        String city = "Test City";
+
+        when(userService.getCityByTelegramId(telegramId)).thenReturn(Optional.of(city));
+
+        ResponseEntity<String> response = userController.getCityByTelegramId(telegramId);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(city, response.getBody());
+    }
+
+    @Test
+    void getCityByTelegramId_shouldThrowCityNotFoundExceptionIfCityDoesNotExist() {
+        String telegramId = "123";
+
+        when(userService.getCityByTelegramId(telegramId)).thenReturn(Optional.empty());
+
+        assertThrows(CityNotFoundException.class, () -> userController.getCityByTelegramId(telegramId));
     }
 
     @Test
@@ -70,12 +91,24 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser_shouldReturnNoContent() {
+    void deleteUser_shouldReturnNoContentIfUserExists() {
         String telegramId = "123";
+
+        when(userService.doesUserExist(telegramId)).thenReturn(true);
+        doNothing().when(userService).deleteUserByTelegramId(telegramId);
 
         ResponseEntity<Void> response = userController.deleteUser(telegramId);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(userService).deleteUserByTelegramId(telegramId);
+    }
+
+    @Test
+    void deleteUser_shouldThrowUserNotFoundExceptionIfUserDoesNotExist() {
+        String telegramId = "123";
+
+        when(userService.doesUserExist(telegramId)).thenReturn(false);
+
+        assertThrows(UserNotFoundException.class, () -> userController.deleteUser(telegramId));
     }
 }

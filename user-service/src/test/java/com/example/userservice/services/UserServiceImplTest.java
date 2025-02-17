@@ -111,6 +111,54 @@ class UserServiceImplTest {
     }
 
     @Test
+    void getCityByTelegramId_shouldReturnCityIfExists() {
+        String telegramId = "123";
+        String city = "Test City";
+        User user = User.builder().telegramId(telegramId).city(city).build();
+
+        when(userRepository.findByTelegramId(telegramId)).thenReturn(Optional.of(user));
+
+        Optional<String> result = userService.getCityByTelegramId(telegramId);
+
+        assertTrue(result.isPresent());
+        assertEquals(city, result.get());
+    }
+
+    @Test
+    void getCityByTelegramId_shouldReturnEmptyIfCityNotFound() {
+        String telegramId = "123";
+
+        when(userRepository.findByTelegramId(telegramId)).thenReturn(Optional.empty());
+
+        Optional<String> result = userService.getCityByTelegramId(telegramId);
+
+        assertTrue(result.isEmpty());
+    }
+
+    @Test
+    void doesUserExist_shouldReturnTrueIfUserExists() {
+        String telegramId = "123";
+        User user = User.builder().telegramId(telegramId).build();
+
+        when(userRepository.findByTelegramId(telegramId)).thenReturn(Optional.of(user));
+
+        boolean exists = userService.doesUserExist(telegramId);
+
+        assertTrue(exists);
+    }
+
+    @Test
+    void doesUserExist_shouldReturnFalseIfUserDoesNotExist() {
+        String telegramId = "123";
+
+        when(userRepository.findByTelegramId(telegramId)).thenReturn(Optional.empty());
+
+        boolean exists = userService.doesUserExist(telegramId);
+
+        assertFalse(exists);
+    }
+
+    @Test
     void deleteUserByTelegramId_shouldDeleteUserIfExists() {
         String telegramId = "123";
         User user = User.builder().telegramId(telegramId).build();
@@ -121,4 +169,16 @@ class UserServiceImplTest {
 
         verify(userRepository).delete(user);
     }
+
+    @Test
+    void deleteUserByTelegramId_shouldDoNothingIfUserDoesNotExist() {
+        String telegramId = "123";
+
+        when(userRepository.findByTelegramId(telegramId)).thenReturn(Optional.empty());
+
+        userService.deleteUserByTelegramId(telegramId);
+
+        verify(userRepository, never()).delete(any(User.class));
+    }
 }
+
