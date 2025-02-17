@@ -2,6 +2,7 @@ package com.example.bot.telegram.commands;
 
 import com.example.bot.service.UserCityService;
 import com.example.bot.telegram.reply.ReplyMessages;
+import com.example.bot.util.CommandUtils;
 import com.pengrad.telegrambot.model.Update;
 import com.pengrad.telegrambot.request.SendMessage;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +20,11 @@ public class SetCityCommand implements Command {
     public SendMessage handle(Update update) {
         String chatId = update.message().chat().id().toString();
         String text = update.message().text();
-        String city = parseCityFromCommand(text);
+        String city = CommandUtils.parseCityFromCommand(text);
         if (city == null) {
             return new SendMessage(chatId, ReplyMessages.SET_CITY_PROMPT.getMessage());
         }
         userCityService.updateCity(chatId, city);
         return new SendMessage(chatId, "Город обновлён");
-    }
-
-    private String parseCityFromCommand(String text) {
-        String[] parts = text.split(" ");
-        return parts.length > 1 ? parts[1] : null;
     }
 }
