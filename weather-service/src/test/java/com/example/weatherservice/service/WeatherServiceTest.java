@@ -3,6 +3,8 @@ package com.example.weatherservice.service;
 import com.example.weatherservice.client.CurrentWeatherApiClient;
 import com.example.weatherservice.dto.WeatherDataDto;
 import com.example.weatherservice.entity.WeatherData;
+import com.example.weatherservice.exception.WeatherDataNotFoundException;
+import com.example.weatherservice.exception.WeatherServiceInternalException;
 import com.example.weatherservice.mapper.WeatherDataMapper;
 import com.example.weatherservice.parser.WeatherResponseParser;
 import com.example.weatherservice.repository.WeatherDataRepository;
@@ -35,7 +37,7 @@ class WeatherServiceTest {
         String city = "Moscow";
         String apiResponse = "{ \"temp\": \"20\" }";
         WeatherDataDto dto = WeatherDataDto.builder()
-                .city("Moscow")
+                .city(city)
                 .temperature(20.0)
                 .build();
         WeatherData entity = new WeatherData();
@@ -53,17 +55,57 @@ class WeatherServiceTest {
         verify(weatherApiClient, times(1)).fetchCurrentWeather(city);
         verify(responseParser, times(1)).parseResponse(apiResponse, city);
         verify(weatherDataRepository, times(1)).save(entity);
+        verify(weatherDataMapper, times(1)).toDTO(entity);
     }
 
     @Test
-    void fetchWeather_failure() {
+    void fetchWeather_shouldThrowWeatherDataNotFoundException_whenApiReturnsEmptyResponse() {
         String city = "Moscow";
 
-        when(weatherApiClient.fetchCurrentWeather(city)).thenThrow(new RuntimeException("API failure"));
+        when(weatherApiClient.fetchCurrentWeather(city)).thenReturn("");
 
-        RuntimeException exception = assertThrows(RuntimeException.class, () -> weatherService.fetchWeather(city));
+        WeatherDataNotFoundException exception = assertThrows(WeatherDataNotFoundException.class,
+                () -> weatherService.fetchWeather(city));
 
-        assertEquals("Failed to fetch and save weather data", exception.getMessage());
+        assertEquals("No weather data was found for city " + city, exception.getMessage());
         verify(weatherApiClient, times(1)).fetchCurrentWeather(city);
+        verifyNoInteractions(responseParser, weatherDataRepository, weatherDataMapper);
+    }
+
+    @Test
+    void fetchWeather_shouldThrowWeatherServiceInternalException_whenApiClientFails() {
+        String city = "Moscow";
+
+        when(weatherApiClient.fetchCurrentWeather(city)).thenThrow(new RuntimeException("api failure"));
+
+        WeatherServiceInternalException exception = assertThrows(WeatherServiceInternalException.class,
+                () -> weatherService.fetchWeather(city));
+
+        assertTrue(exception.getMessage().contains("rrror when retrieving weather data for city: Moscow"));
+        assertNotNull(exception.getCause());
+        assertEquals("api failure", exception.getCause().getMessage());
+
+        verify(weatherApiClient, times(1)).fetchCurrentWeather(city);
+        verifyNoInteractions(responseParser, weatherDataRepository, weatherDataMapper);
+    }
+
+    @Test
+    void fetchWeather_shouldThrowWeatherServiceInternalException_whenParsingFails() {
+        String city = "Moscow";
+        String apiResponse = "{ \"temp\": \"20\" }";
+
+        when(weatherApiClient.fetchCurrentWeather(city)).thenReturn(apiResponse);
+        when(responseParser.parseResponse(apiResponse, city)).thenThrow(new RuntimeException("parsing error"));
+
+        WeatherServiceInternalException exception = assertThrows(WeatherServiceInternalException.class,
+                () -> weatherService.fetchWeather(city));
+
+        assertTrue(exception.getMessage().contains("error when retrieving weather data for city: Moscow"));
+        assertNotNull(exception.getCause());
+        assertEquals("parsing error", exception.getCause().getMessage());
+
+        verify(weatherApiClient, times(1)).fetchCurrentWeather(city);
+        verify(responseParser, times(1)).parseResponse(apiResponse, city);
+        verifyNoInteractions(weatherDataRepository, weatherDataMapper);
     }
 }
