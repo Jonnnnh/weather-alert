@@ -5,7 +5,7 @@ server:
 
 spring:
   profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
+    active: dev
   rabbitmq:
     host: localhost
     port: 5672
@@ -13,25 +13,25 @@ spring:
     password: guest
 
   datasource:
+    url: jdbc:postgresql://localhost:5432/user_service_db
+    username: postgres
+    password: pass
     driver-class-name: org.postgresql.Driver
+
+  config:
+    import: "optional:classpath:.properties"
 
 app:
   application-name: botService
-  telegram:
-    bot-name: Weather Bot
-    token: ${TOKEN}
   rabbitmq:
     weather-queue: weatherRequestQueue
     user-queue: userUpdateQueue
     dlx: weather-exchange.dlx
     weather-key: weather-routing-key
     user-key: user-routing-key
-
-grpc:
-  client:
-    userService:
-      address: "localhost:9090"
-      negotiationType: plaintext
+  telegram:
+    bot-name: Weather Bot
+    token: ${TOKEN}
 
 logging:
   level:
@@ -40,21 +40,49 @@ logging:
     org.springframework.web: DEBUG
     org.springframework.boot: INFO
 
+debug: true
+
 ---
 spring:
   config:
     activate:
       on-profile: dev
     import: "optional:classpath:.properties"
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
+
   datasource:
-    url: jdbc:postgresql://localhost:5432/weather_bot
+    url: jdbc:postgresql://localhost:5432/user_service_db
     username: postgres
     password: pass
+    driver-class-name: org.postgresql.Driver
+
+grpc:
+  client:
+    userService:
+      address: localhost:9090
+      negotiationType: plaintext
+
+app:
+  rabbitmq:
+    weather-queue: weatherRequestQueue
+    user-queue: userUpdateQueue
+    dlx: weather-exchange.dlx
+    weather-key: weather-routing-key
+    user-key: user-routing-key
 
 logging:
   level:
-    org.springframework.boot.context.properties: TRACE
-    org.springframework.boot.context.config: DEBUG
+    com.example.bot.configuration.MessageConverterConfig: DEBUG
+    com.example.bot.configuration.GrpcUserServiceClientConfiguration: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.boot: INFO
+
+debug: true
 
 ---
 spring:
@@ -62,16 +90,38 @@ spring:
     activate:
       on-profile: prod
     import: "optional:classpath:.properties"
+
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
+
   datasource:
-    url: jdbc:postgresql://db:5432/weather_bot
+    url: jdbc:postgresql://postgres_user_service:5432/user_service_db
     username: postgres
     password: pass
+    driver-class-name: org.postgresql.Driver
+
+grpc:
+  client:
+    userService:
+      address: userservice:9090
+      negotiationType: plaintext
+
+app:
+  rabbitmq:
+    weather-queue: weatherRequestQueue
+    user-queue: userUpdateQueue
+    dlx: weather-exchange.dlx
+    weather-key: weather-routing-key
+    user-key: user-routing-key
 
 logging:
   level:
-    org.springframework.boot.context.properties: TRACE
-    org.springframework.boot.context.config: DEBUG
-    com.example.bot.telegram: DEBUG
-    com.example.bot.clients: DEBUG
+    com.example.bot.configuration.MessageConverterConfig: DEBUG
+    com.example.bot.configuration.GrpcUserServiceClientConfiguration: DEBUG
     org.springframework.web: DEBUG
     org.springframework.boot: INFO
+
+debug: true

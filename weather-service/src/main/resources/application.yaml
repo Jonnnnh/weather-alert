@@ -1,48 +1,44 @@
 server:
-  port: 8083
+  port: 8082
 
 spring:
-  datasource:
-    driver-class-name: org.postgresql.Driver
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
   jpa:
     hibernate:
       ddl-auto: none
-  profiles:
-    active: ${SPRING_PROFILES_ACTIVE:dev}
-  rabbitmq:
-    host: localhost
-    port: 5672
-    username: guest
-    password: guest
   json:
     trusted:
       packages: com.example.weatherservice.dto.WeatherDataDto
 
-logging:
-  level:
-    com.example.weatherservice.services.WeatherService: DEBUG
 app:
   rabbitmq:
     weather-queue: weatherRequestQueue
     dlx: weather-exchange.dlx
     weather-key: weather-routing-key
----
-spring:
-  config:
-    activate:
-      on-profile: dev
-    import: "optional:classpath:.properties"
-  datasource:
-    url: jdbc:postgresql://localhost:5432/weather_bot
-    username: postgres
-    password: pass
 
 weather-api:
   api-key: ${WEATHER_API_KEY}
   host: ${WEATHER_API_HOST}
   endpoint: ${WEATHER_API_ENDPOINT}
 
-debug: false
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+    import: "optional:classpath:.properties"
+
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/weather_service_db
+    username: postgres
+    password: pass
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: guest
+    password: guest
 
 ---
 spring:
@@ -50,14 +46,14 @@ spring:
     activate:
       on-profile: prod
     import: "optional:classpath:.properties"
+
   datasource:
-    url: jdbc:postgresql://db:5432/weather_bot
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://postgres_weather_service:5433/weather_service_db
     username: postgres
     password: pass
-
-weather-api:
-  api-key: ${WEATHER_API_KEY}
-  host: ${WEATHER_API_HOST}
-  endpoint: ${WEATHER_API_ENDPOINT}
-
-debug: false
+  rabbitmq:
+    host: rabbitmq
+    port: 5672
+    username: guest
+    password: guest
